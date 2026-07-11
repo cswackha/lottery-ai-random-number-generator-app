@@ -533,6 +533,12 @@ st.markdown(
 )
 
 with st.sidebar:
+    st.image("assets/logo.png", use_container_width=True)
+
+    st.markdown("## Lottery AI")
+    st.caption("Random Number Generator")
+    st.divider()
+
     st.header("Settings")
 
     game_name = st.selectbox("Lottery game", list(GAMES.keys()))
@@ -628,22 +634,22 @@ try:
             if cfg["has_bonus"]:
                 bonus_html = f'<div class="bonus-pill">{bonus_label}: {row[bonus_label]}</div>'
 
-            st.markdown(
-                f"""
-                <div class="draw-card">
-                    <div class="draw-title">Draw {row["Draw"]}</div>
-                    <div class="draw-numbers">{row["White Balls"]}</div>
-                    {bonus_html}
-                    <p style="margin-top: 0.75rem; color: #64748B;">
-                        Sum: {row["Sum"]} &nbsp; | &nbsp;
-                        Spread: {row["Spread"]} &nbsp; | &nbsp;
-                        Odd/Even: {row["Odd/Even"]} &nbsp; | &nbsp;
-                        Low/High: {row["Low/High"]}
-                    </p>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+        #    st.markdown(
+        #        f"""
+        #         <div class="draw-card">
+        #             <div class="draw-title">Draw {row["Draw"]}</div>
+        #             <div class="draw-numbers">{row["White Balls"]}</div>
+        #             {bonus_html}
+        #             <p style="margin-top: 0.75rem; color: #64748B;">
+        #                 Sum: {row["Sum"]} &nbsp; | &nbsp;
+        #                 Spread: {row["Spread"]} &nbsp; | &nbsp;
+        #                 Odd/Even: {row["Odd/Even"]} &nbsp; | &nbsp;
+        #                 Low/High: {row["Low/High"]}
+        #             </p>
+        #         </div>
+        #         """,
+        #         unsafe_allow_html=True,
+        #     )
 
         st.dataframe(results, use_container_width=True, hide_index=True)
         csv = results.to_csv(index=False).encode("utf-8")
