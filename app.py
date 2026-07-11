@@ -460,35 +460,35 @@ def generate_draws(
 
     return pd.DataFrame(generated)
 
-
 st.set_page_config(
     page_title="AI Lottery Random Number Generator",
     page_icon="🎲",
     layout="wide",
 )
 
+# CSS block here
 st.markdown(
     """
     <style>
-    /* Make sidebar more compact */
-    section[data-testid="stSidebar"] {
-        width: 275px !important;
+    .hero {
+        padding: 2rem 2.25rem;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #38BDF8 100%);
+        color: white;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
     }
 
-    section[data-testid="stSidebar"] h1,
-    section[data-testid="stSidebar"] h2,
-    section[data-testid="stSidebar"] h3 {
-        margin-top: 0.25rem !important;
-        margin-bottom: 0.25rem !important;
+    .hero h1 {
+        font-size: 2.4rem;
+        margin-bottom: 0.35rem;
+        color: white;
     }
 
-    section[data-testid="stSidebar"] .stMarkdown,
-    section[data-testid="stSidebar"] .stRadio,
-    section[data-testid="stSidebar"] .stSelectbox,
-    section[data-testid="stSidebar"] .stSlider,
-    section[data-testid="stSidebar"] .stCheckbox,
-    section[data-testid="stSidebar"] .stTextInput {
-        margin-bottom: 0.25rem !important;
+    .hero p {
+        font-size: 1.05rem;
+        margin-bottom: 0;
+        opacity: 0.95;
     }
 
     section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
@@ -499,15 +499,21 @@ st.markdown(
         margin-top: 0.45rem !important;
         margin-bottom: 0.45rem !important;
     }
-
-    section[data-testid="stSidebar"] label {
-        margin-bottom: 0.1rem !important;
-    }
-
-    section[data-testid="stSidebar"] .stButton {
-        margin-top: 0.4rem !important;
-    }
     </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# Main page banner here
+st.markdown(
+    """
+    <div class="hero">
+        <h1>🎲 AI Lottery Random Number Generator</h1>
+        <p>
+            Generate frequency-weighted lottery draws with historical filters,
+            shape controls, and smart bonus-ball exclusions.
+        </p>
+    </div>
     """,
     unsafe_allow_html=True,
 )
@@ -515,8 +521,8 @@ st.markdown(
 with st.sidebar:
     st.image("assets/logo.png", use_container_width=True)
 
-    st.markdown("## Lottery AI")
-    st.caption("Random Number Generator")
+    # st.markdown("## Lottery AI")
+    # st.caption("Random Number Generator")
 
     st.header("Settings")
 
