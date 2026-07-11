@@ -467,10 +467,69 @@ st.set_page_config(
     layout="wide",
 )
 
-st.title("🎲 AI Lottery Random Number Generator")
-st.caption(
-    "MVP prototype: frequency-weighted random lottery draws with simple historical and shape filters. "
-    "This tool does not predict winning numbers."
+st.markdown(
+    """
+    <style>
+    .hero {
+        padding: 2rem 2.25rem;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #38BDF8 100%);
+        color: white;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+    }
+
+    .hero h1 {
+        font-size: 2.4rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .hero p {
+        font-size: 1.05rem;
+        margin-bottom: 0;
+        opacity: 0.95;
+    }
+
+    .draw-card {
+        padding: 1.25rem;
+        border-radius: 18px;
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        margin-bottom: 1rem;
+    }
+
+    .draw-title {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #64748B;
+        margin-bottom: 0.35rem;
+    }
+
+    .draw-numbers {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #0F172A;
+    }
+
+    .bonus-pill {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        background: #DBEAFE;
+        color: #1E40AF;
+        font-weight: 700;
+        margin-top: 0.6rem;
+    }
+    </style>
+
+    <div class="hero">
+        <h1>🎲 AI Lottery Random Number Generator</h1>
+        <p>Generate frequency-weighted lottery draws with historical filters, shape controls, and smart bonus-ball exclusions.</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 with st.sidebar:
@@ -561,8 +620,32 @@ try:
         )
 
         st.subheader("Generated Draws")
-        st.dataframe(results, use_container_width=True, hide_index=True)
+        
+        for _, row in results.iterrows():
+            bonus_label = cfg["bonus_name"] if cfg["has_bonus"] else None
 
+            bonus_html = ""
+            if cfg["has_bonus"]:
+                bonus_html = f'<div class="bonus-pill">{bonus_label}: {row[bonus_label]}</div>'
+
+            st.markdown(
+                f"""
+                <div class="draw-card">
+                    <div class="draw-title">Draw {row["Draw"]}</div>
+                    <div class="draw-numbers">{row["White Balls"]}</div>
+                    {bonus_html}
+                    <p style="margin-top: 0.75rem; color: #64748B;">
+                        Sum: {row["Sum"]} &nbsp; | &nbsp;
+                        Spread: {row["Spread"]} &nbsp; | &nbsp;
+                        Odd/Even: {row["Odd/Even"]} &nbsp; | &nbsp;
+                        Low/High: {row["Low/High"]}
+                    </p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        st.dataframe(results, use_container_width=True, hide_index=True)
         csv = results.to_csv(index=False).encode("utf-8")
         st.download_button(
             "Download generated draws as CSV",

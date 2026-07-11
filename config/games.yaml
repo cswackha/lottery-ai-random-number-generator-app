@@ -1,0 +1,36 @@
+powerball:
+  display_name: Powerball
+  white_count: 5
+  white_min: 1
+  white_max: 69
+  bonus_name: Powerball
+  bonus_min: 1
+  bonus_max: 26
+  has_bonus: true
+
+mega_millions:
+  display_name: Mega Millions
+  white_count: 5
+  white_min: 1
+  white_max: 70
+  bonus_name: Mega Ball
+  bonus_min: 1
+  bonus_max: 24
+  has_bonus: true
+
+texas_lotto:
+  display_name: Lotto Texas
+  white_count: 6
+  white_min: 1
+  white_max: 54
+  has_bonus: false
+
+texas_two_step:
+  display_name: Texas Two Step
+  white_count: 4
+  white_min: 1
+  white_max: 35
+  bonus_name: Bonus Ball
+  bonus_min: 1
+  bonus_max: 35
+  has_bonus: true
