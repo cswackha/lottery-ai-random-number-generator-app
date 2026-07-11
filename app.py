@@ -544,25 +544,50 @@ with st.sidebar:
     game_name = st.selectbox("Lottery game", list(GAMES.keys()))
     cfg = GAMES[game_name]
 
-    source = st.radio("Past winners source", ["Fetch latest public CSV", "Upload my file"], index=0)
+    source = st.radio(
+        "Past winners source",
+        ["Fetch latest public CSV", "Upload my file"],
+        index=0,
+    )
 
     uploaded_file = None
     if source == "Upload my file":
-        uploaded_file = st.file_uploader("Upload past winners CSV/XLSX", type=["csv", "xlsx", "xls"])
+        uploaded_file = st.file_uploader(
+            "Upload past winners CSV/XLSX",
+            type=["csv", "xlsx", "xls"],
+        )
 
-    number_of_draws = st.slider("Number of draws", 1, 50, 5)
-    weighting_mode = st.selectbox("Hot/cold frequency weighting", ["Hot", "Cold", "Hot/Cold"], index=2)
-    shape = st.selectbox("Shape", ["Loose", "More Loose", "Tight", "More Tight", "Let AI choose"], index=2)
+    weighting_mode = st.selectbox(
+        "Hot/cold frequency weighting",
+        ["Hot", "Cold", "Hot/Cold"],
+        index=2,
+    )
 
-    st.subheader("Constraints")
-    no_historical_duplicates = st.checkbox("No historical draw duplicates", value=True)
-    no_duplicate_numbers = st.checkbox("No duplicate numbers within a draw", value=True)
+    shape = st.selectbox(
+        "Shape",
+        ["Loose", "More Loose", "Tight", "More Tight", "Let AI choose"],
+        index=2,
+    )
 
-    bonus_not_in_whites = True
+    st.divider()
+
+    st.subheader("Sliders")
+
+    number_of_draws = st.slider(
+        "Number of draws",
+        1,
+        50,
+        5,
+    )
+
     bonus_exclusion_count = 0
     if cfg["has_bonus"]:
-        bonus_not_in_whites = st.checkbox(f"{cfg['bonus_name']} cannot be one of the white balls", value=True)
-        bonus_exclusion_count = st.slider(f"Exclude {cfg['bonus_name']} from last X draws", 1, 99, 10)
+        bonus_exclusion_count = st.slider(
+            f"Exclude {cfg['bonus_name']} from last X draws",
+            1,
+            99,
+            10,
+        )
 
     cross_draw_repeat_penalty = st.slider(
         "Cross-draw repeat penalty",
@@ -573,12 +598,42 @@ with st.sidebar:
         help="Below 1.0 discourages reuse across generated draws. Above 1.0 allows more repeats.",
     )
 
-    no_three_consecutive = st.checkbox("No 3+ consecutive white ball runs", value=True)
+    st.divider()
+
+    st.subheader("Constraints")
+
+    no_historical_duplicates = st.checkbox(
+        "No historical draw duplicates",
+        value=True,
+    )
+
+    no_duplicate_numbers = st.checkbox(
+        "No duplicate numbers within a draw",
+        value=True,
+    )
+
+    bonus_not_in_whites = True
+    if cfg["has_bonus"]:
+        bonus_not_in_whites = st.checkbox(
+            f"{cfg['bonus_name']} cannot be one of the white balls",
+            value=True,
+        )
+
+    no_three_consecutive = st.checkbox(
+        "No 3+ consecutive white ball runs",
+        value=True,
+    )
+
+    st.divider()
 
     seed_text = st.text_input("Optional random seed", value="")
     seed = int(seed_text) if seed_text.strip().isdigit() else None
 
-    generate = st.button("Generate draws", type="primary", use_container_width=True)
+    generate = st.button(
+        "Generate draws",
+        type="primary",
+        use_container_width=True,
+    )
 
 try:
     if source == "Fetch latest public CSV":
