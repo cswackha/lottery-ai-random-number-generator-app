@@ -470,64 +470,44 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    .hero {
-        padding: 2rem 2.25rem;
-        border-radius: 22px;
-        background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 55%, #38BDF8 100%);
-        color: white;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+    /* Make sidebar more compact */
+    section[data-testid="stSidebar"] {
+        width: 275px !important;
     }
 
-    .hero h1 {
-        font-size: 2.4rem;
-        margin-bottom: 0.35rem;
+    section[data-testid="stSidebar"] h1,
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3 {
+        margin-top: 0.25rem !important;
+        margin-bottom: 0.25rem !important;
     }
 
-    .hero p {
-        font-size: 1.05rem;
-        margin-bottom: 0;
-        opacity: 0.95;
+    section[data-testid="stSidebar"] .stMarkdown,
+    section[data-testid="stSidebar"] .stRadio,
+    section[data-testid="stSidebar"] .stSelectbox,
+    section[data-testid="stSidebar"] .stSlider,
+    section[data-testid="stSidebar"] .stCheckbox,
+    section[data-testid="stSidebar"] .stTextInput {
+        margin-bottom: 0.25rem !important;
     }
 
-    .draw-card {
-        padding: 1.25rem;
-        border-radius: 18px;
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-        margin-bottom: 1rem;
+    section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+        gap: 0.35rem !important;
     }
 
-    .draw-title {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #64748B;
-        margin-bottom: 0.35rem;
+    section[data-testid="stSidebar"] hr {
+        margin-top: 0.45rem !important;
+        margin-bottom: 0.45rem !important;
     }
 
-    .draw-numbers {
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: #0F172A;
+    section[data-testid="stSidebar"] label {
+        margin-bottom: 0.1rem !important;
     }
 
-    .bonus-pill {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 999px;
-        background: #DBEAFE;
-        color: #1E40AF;
-        font-weight: 700;
-        margin-top: 0.6rem;
+    section[data-testid="stSidebar"] .stButton {
+        margin-top: 0.4rem !important;
     }
     </style>
-
-    <div class="hero">
-        <h1>🎲 AI Lottery Random Number Generator</h1>
-        <p>Generate frequency-weighted lottery draws with historical filters, shape controls, and smart bonus-ball exclusions.</p>
-    </div>
     """,
     unsafe_allow_html=True,
 )
@@ -535,13 +515,12 @@ st.markdown(
 with st.sidebar:
     st.image("assets/logo.png", use_container_width=True)
 
-    st.markdown("## Lottery AI")
-    st.caption("Random Number Generator")
-    st.divider()
+    # st.markdown("## Lottery AI")
+    # st.caption("Random Number Generator")
 
     st.header("Settings")
 
-    game_name = st.selectbox("Lottery game", list(GAMES.keys()))
+    game_name = st.selectbox("Pick a Lottery Game", list(GAMES.keys()))
     cfg = GAMES[game_name]
 
     source = st.radio(
