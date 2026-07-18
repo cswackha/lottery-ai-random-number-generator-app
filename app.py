@@ -2,7 +2,9 @@ import io
 import re
 import random
 from typing import Dict, List, Optional, Tuple
+from pathlib import Path
 
+import yaml
 import numpy as np
 import pandas as pd
 import requests
@@ -120,7 +122,8 @@ def parse_date_from_row(row: pd.Series) -> Optional[pd.Timestamp]:
 
 def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
     """
-    Return normalized history with columns: draw_date, whites, bonus.
+    Return normalized history with columns:
+    draw_date, whites, bonus.
 
     Accepted MVP formats:
     1. NY Open Data winning_numbers style.
@@ -139,82 +142,139 @@ def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
     for idx in range(len(raw)):
         raw_row = raw.iloc[idx]
         norm_row = norm.iloc[idx]
+
         draw_date = parse_date_from_row(raw_row)
         nums: List[int] = []
 
+        # -----------------------------------------
+        # Format 1: NY Open Data
+        # -----------------------------------------
         winning_col = None
-        for c in norm.columns:
-            if c in ["winning_numbers", "winning_number", "winning_nums"]:
-                winning_col = c
+
+        for column_name in norm.columns:
+            if column_name in [
+                "winning_numbers",
+                "winning_number",
+                "winning_nums",
+            ]:
+                winning_col = column_name
                 break
 
-        if winning_col:
+        if winning_col is not None:
             nums = extract_ints(norm_row[winning_col])
 
-        # Some datasets store the bonus ball in a separate column.
+            # Mega Millions commonly stores its Mega Ball
+            # in a separate column. This also supports any
+            # Powerball source that stores Powerball separately.
             if has_bonus and len(nums) == white_count:
                 possible_bonus_columns = [
-                    "mega_ball",
-                    "megaball",
                     "powerball",
                     "power_ball",
+                    "mega_ball",
+                    "megaball",
                     "bonus_ball",
                     "bonus",
-            ]
+                ]
 
-            for bonus_column in possible_bonus_columns:
-                if bonus_column in norm.columns:
-                    found = extract_ints(norm_row[bonus_column])
+                for bonus_column in possible_bonus_columns:
+                    if bonus_column in norm.columns:
+                        bonus_values = extract_ints(
+                            norm_row[bonus_column]
+                        )
 
-                if found:
-                    nums.append(found[0])
-                    break
+                        if bonus_values:
+                            nums.append(bonus_values[0])
+                            break
 
-        # Texas headerless CSV: Game Name, Month, Day, Year, Num1...
-        if not nums and raw.shape[1] >= 4 + needed:
+        # -----------------------------------------
+        # Format 2: Texas Lottery headerless CSV
+        # Game, month, day, year, balls...
+        # -----------------------------------------
+        if len(nums) < needed and raw.shape[1] >= 4 + needed:
             values = list(raw_row.values)
             candidate = []
-            for j in range(4, 4 + needed):
+
+            for position in range(4, 4 + needed):
                 try:
-                    candidate.append(int(values[j]))
-                except Exception:
-                    pass
+                    candidate.append(int(values[position]))
+                except (TypeError, ValueError):
+                    candidate = []
+                    break
+
             if len(candidate) == needed:
                 nums = candidate
 
-        # Named number columns.
-        if not nums:
+        # -----------------------------------------
+        # Format 3: Named columns
+        # Num1, Num2, Ball1, Bonus Ball, etc.
+        # -----------------------------------------
+        if len(nums) < needed:
             white_cols = []
             bonus_col = None
 
-            for c in norm.columns:
-                c_str = str(c).lower()
-                if any(skip in c_str for skip in ["date", "month", "day", "year", "game", "jackpot", "winner", "multiplier"]):
+            for column_name in norm.columns:
+                column_text = str(column_name).lower()
+
+                if any(
+                    excluded in column_text
+                    for excluded in [
+                        "date",
+                        "month",
+                        "day",
+                        "year",
+                        "game",
+                        "jackpot",
+                        "winner",
+                        "multiplier",
+                    ]
+                ):
                     continue
 
-                if any(b in c_str for b in ["bonus", "powerball", "power_ball", "mega_ball", "megaball"]):
-                    bonus_col = c
+                if any(
+                    bonus_text in column_text
+                    for bonus_text in [
+                        "bonus",
+                        "powerball",
+                        "power_ball",
+                        "mega_ball",
+                        "megaball",
+                    ]
+                ):
+                    bonus_col = column_name
                     continue
 
-                if re.search(r"(num|ball|white|n)_?\d+", c_str):
-                    white_cols.append(c)
+                if re.search(
+                    r"(num|ball|white|n)_?\d+",
+                    column_text,
+                ):
+                    white_cols.append(column_name)
 
-            def sort_key(col):
-                found = re.findall(r"\d+", str(col))
+            def sort_key(column):
+                found = re.findall(r"\d+", str(column))
                 return int(found[-1]) if found else 999
 
             white_cols = sorted(white_cols, key=sort_key)
 
-            for c in white_cols[:white_count]:
-                found = extract_ints(norm_row[c])
-                if found:
-                    nums.append(found[0])
+            named_numbers = []
 
-            if has_bonus and bonus_col:
+            for column_name in white_cols[:white_count]:
+                found = extract_ints(norm_row[column_name])
+
+                if found:
+                    named_numbers.append(found[0])
+
+            if has_bonus and bonus_col is not None:
                 found = extract_ints(norm_row[bonus_col])
-                if found:
-                    nums.append(found[0])
 
+                if found:
+                    named_numbers.append(found[0])
+
+            if len(named_numbers) >= white_count:
+                nums = named_numbers
+
+        # -----------------------------------------
+        # Validate parsed numbers
+        # -----------------------------------------
         if len(nums) < white_count:
             continue
 
@@ -226,17 +286,15 @@ def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
             else None
         )
 
-        # Validate white balls
         if not all(
-            cfg["white_min"] <= n <= cfg["white_max"]
-            for n in whites
+            cfg["white_min"] <= number <= cfg["white_max"]
+            for number in whites
         ):
             continue
 
-        if len(set(whites)) != len(whites):
+        if len(set(whites)) != white_count:
             continue
 
-        # Validate bonus ball safely
         if has_bonus:
             if bonus is None:
                 continue
@@ -248,11 +306,27 @@ def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
             ):
                 continue
 
-        records.append({"draw_date": draw_date, "whites": tuple(whites), "bonus": bonus})
+        records.append(
+            {
+                "draw_date": draw_date,
+                "whites": tuple(whites),
+                "bonus": bonus,
+            }
+        )
 
     history = pd.DataFrame(records)
+
     if history.empty:
         return history
+
+    if history["draw_date"].notna().any():
+        history = history.sort_values(
+            "draw_date",
+            ascending=False,
+            na_position="last",
+        ).reset_index(drop=True)
+
+    return history
 
     if history["draw_date"].notna().any():
         history = history.sort_values("draw_date", ascending=False, na_position="last").reset_index(drop=True)
