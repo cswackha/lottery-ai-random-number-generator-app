@@ -9,14 +9,15 @@ powerball:
   has_bonus: true
 
 mega_millions:
-  display_name: Mega Millions
+  display_name: "Mega Millions"
   white_count: 5
   white_min: 1
   white_max: 70
-  bonus_name: Mega Ball
+  bonus_name: "Mega Ball"
   bonus_min: 1
   bonus_max: 24
   has_bonus: true
+  history_url: "https://data.ny.gov/resource/5xaw-6ayf.csv?$limit=5000"
 
 texas_lotto:
   display_name: Lotto Texas

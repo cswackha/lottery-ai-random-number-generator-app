@@ -151,6 +151,25 @@ def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
         if winning_col:
             nums = extract_ints(norm_row[winning_col])
 
+        # Some datasets store the bonus ball in a separate column.
+            if has_bonus and len(nums) == white_count:
+                possible_bonus_columns = [
+                    "mega_ball",
+                    "megaball",
+                    "powerball",
+                    "power_ball",
+                    "bonus_ball",
+                    "bonus",
+            ]
+
+            for bonus_column in possible_bonus_columns:
+                if bonus_column in norm.columns:
+                    found = extract_ints(norm_row[bonus_column])
+
+                if found:
+                    nums.append(found[0])
+                    break
+
         # Texas headerless CSV: Game Name, Month, Day, Year, Num1...
         if not nums and raw.shape[1] >= 4 + needed:
             values = list(raw_row.values)
@@ -200,14 +219,34 @@ def parse_history(df: pd.DataFrame, game_name: str) -> pd.DataFrame:
             continue
 
         whites = sorted(nums[:white_count])
-        bonus = nums[white_count] if has_bonus and len(nums) > white_count else None
 
-        if not all(cfg["white_min"] <= n <= cfg["white_max"] for n in whites):
+        bonus = (
+            nums[white_count]
+            if has_bonus and len(nums) > white_count
+            else None
+        )
+
+        # Validate white balls
+        if not all(
+            cfg["white_min"] <= n <= cfg["white_max"]
+            for n in whites
+        ):
             continue
+
         if len(set(whites)) != len(whites):
             continue
-        if has_bonus and not (cfg["bonus_min"] <= bonus <= cfg["bonus_max"]):
-            continue
+
+        # Validate bonus ball safely
+        if has_bonus:
+            if bonus is None:
+                continue
+
+            if not (
+                cfg["bonus_min"]
+                <= bonus
+                <= cfg["bonus_max"]
+            ):
+                continue
 
         records.append({"draw_date": draw_date, "whites": tuple(whites), "bonus": bonus})
 
