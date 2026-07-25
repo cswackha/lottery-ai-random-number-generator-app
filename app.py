@@ -1467,6 +1467,7 @@ def build_shape_plan(
         5,
     )
 
+    # Always define this variable, including for Lotto Texas.
     bonus_exclusion_count = 0
 
     if cfg["has_bonus"]:
