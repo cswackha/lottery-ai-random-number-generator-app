@@ -1,6 +1,8 @@
-# AI Lottery Random Number Generator
+# Lottery AI Random Number Generator
 
-A minimal Streamlit MVP for generating random lottery number draws using historical draw data, frequency weighting, and simple shape filters.
+A Streamlit application that generates randomized lottery combinations
+using historical draw data, number-frequency weighting, shape filters,
+recent bonus-ball exclusions, and cross-draw overlap controls.
 
 ## Supported games
 
@@ -9,99 +11,39 @@ A minimal Streamlit MVP for generating random lottery number draws using histori
 - Lotto Texas
 - Texas Two Step
 
-## MVP features
+## Current features
 
-- Select lottery game
-- Generate 1–50 draws
-- Choose Hot, Cold, or Hot/Cold weighting
-- Choose Loose, More Loose, Tight, More Tight, or Let AI choose
-- Parse past winning numbers
-- Prevent historical draw duplicates
-- Prevent duplicate white balls within a draw
-- Prevent bonus/powerball/mega ball from matching selected white balls
-- Exclude bonus balls used in the last X draws
-- Apply cross-draw repeat penalty
-- Block 3+ consecutive white ball runs
-- Download generated results as CSV
+- Fetches public past-winner data or accepts CSV/XLSX uploads
+- Hot, Cold, and Hot/Cold weighting
+- Loose, More Loose, Tight, More Tight, and AI-selected shape profiles
+- Historical draw duplicate prevention
+- No duplicate white balls within one draw
+- Recent bonus-ball exclusion
+- Cross-draw repeat penalty
+- No runs of three or more consecutive white balls
+- Responsive game-summary cards
+- Calculated next draw date
+- Game-specific How to Play panel
+- Scrolling current-jackpot ticker with graceful fallback
+- CSV result export
 
-## Important note
+## Run locally
 
-This app does not predict winning lottery numbers. It generates random combinations using historical frequency and shape filters. Lottery drawings are random.
-
-## Local setup
-
-### 1. Clone the repo
-
-```bash
-git clone https://github.com/YOUR-GITHUB-USERNAME/lottery-AI-random-number-generator-app.git
-cd lottery-AI-random-number-generator-app
-```
-
-### 2. Create and activate a virtual environment
-
-Windows PowerShell:
-
-```bash
+```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-```
-
-Mac/Linux:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run the app
-
-```bash
+python -m pip install -r requirements.txt
 streamlit run app.py
-```
-
-## GitHub push steps
-
-```bash
-git status
-git add .
-git commit -m "Add minimal Streamlit lottery generator MVP"
-git branch -M main
-git remote add origin https://github.com/YOUR-GITHUB-USERNAME/lottery-AI-random-number-generator-app.git
-git push -u origin main
-```
-
-If the remote already exists:
-
-```bash
-git remote set-url origin https://github.com/YOUR-GITHUB-USERNAME/lottery-AI-random-number-generator-app.git
-git push -u origin main
 ```
 
 ## Deploy to Streamlit Community Cloud
 
-1. Push this repo to GitHub.
-2. Go to Streamlit Community Cloud.
-3. Select **New app**.
-4. Choose your GitHub repo.
-5. Set the main file path to:
+Push `app.py`, `requirements.txt`, the `.streamlit` folder, and `assets/logo.png`
+to GitHub. In Streamlit Community Cloud, select the repository, branch `main`,
+and entry point `app.py`.
 
-```text
-app.py
-```
+## Disclaimer
 
-6. Deploy.
-
-## Suggested next improvements
-
-- Add a cleaner card-based results layout
-- Add number-locking so users can lock favorite numbers
-- Add detailed draw explanation cards
-- Add charting for hot/cold frequency
-- Add unit tests for each game parser
-- Move game definitions to a YAML config file
+This app is for entertainment and experimentation. Lottery drawings are
+random. Historical frequency and shape filters do not improve the
+mathematical odds of winning.
