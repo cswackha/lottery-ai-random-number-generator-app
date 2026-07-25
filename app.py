@@ -1585,15 +1585,16 @@ try:
             seed=seed,
         )
 
-        st.subheader("Generated Draws")
-        render_result_cards(results, cfg)
+        st.subheader("Generated Draws Results Table")
 
-        with st.expander("Results table"):
-            st.dataframe(
-                results,
-                use_container_width=True,
-                hide_index=True,
-            )
+        table_height = 38 * (len(results) + 1) + 3
+
+        st.dataframe(
+            results,
+            use_container_width=True,
+            hide_index=True,
+            height=table_height,
+        )
 
         csv = results.to_csv(index=False).encode("utf-8")
 
