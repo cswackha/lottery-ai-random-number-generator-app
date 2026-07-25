@@ -1546,7 +1546,7 @@ try:
 
     render_summary_cards(game_name, history)
 
-if cfg["has_bonus"] and bonus_exclusion_count:
+    if cfg["has_bonus"] and bonus_exclusion_count:
     excluded = (
         history["bonus"]
         .dropna()
@@ -1567,7 +1567,7 @@ if cfg["has_bonus"] and bonus_exclusion_count:
         '</div>'
     )
 
-render_how_to_play(game_name)
+    render_how_to_play(game_name)
 
     if generate:
         results = generate_draws(
