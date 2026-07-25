@@ -1086,8 +1086,15 @@ def generate_draws(
     used_across_draws: Dict[int, int] = {}
     max_attempts = max(3000, number_of_draws * 1000)
 
+    shape_plan = build_shape_plan(
+        selected_shape=shape,
+        number_of_draws=number_of_draws,
+        rng=rng,
+    )
+
     for draw_index in range(number_of_draws):
         accepted = None
+        draw_shape = shape_plan[draw_index]
 
         for _ in range(max_attempts):
             base_weights = weights_from_frequency(
@@ -1209,7 +1216,7 @@ def generate_draws(
                     f"{low_count}/"
                     f"{len(whites) - low_count}"
                 ),
-                "Shape": shape,
+                "Shape": draw_shape,
             }
             break
 
@@ -1404,17 +1411,51 @@ with st.sidebar:
         index=2,
     )
 
-    shape = st.selectbox(
-        "Shape",
-        [
-            "Loose",
-            "More Loose",
-            "Tight",
+def build_shape_plan(
+    selected_shape: str,
+    number_of_draws: int,
+    rng: np.random.Generator,
+) -> List[str]:
+    """
+    Create the shape assigned to each generated draw.
+
+    Combined selections are split as evenly as possible.
+    When the number of draws is odd, the extra draw is
+    randomly assigned to either shape.
+    """
+    combined_shapes = {
+        "Tight/Loose": ("Tight", "Loose"),
+        "More Tight/More Loose": (
             "More Tight",
-            "Let AI choose",
-        ],
-        index=2,
+            "More Loose",
+        ),
+    }
+
+    if selected_shape not in combined_shapes:
+        return [selected_shape] * number_of_draws
+
+    first_shape, second_shape = combined_shapes[selected_shape]
+
+    first_count = number_of_draws // 2
+    second_count = number_of_draws // 2
+
+    if number_of_draws % 2 == 1:
+        extra_shape = int(rng.integers(0, 2))
+
+        if extra_shape == 0:
+            first_count += 1
+        else:
+            second_count += 1
+
+    shape_plan = (
+        [first_shape] * first_count
+        + [second_shape] * second_count
     )
+
+    # Mix the order instead of listing every tight draw first.
+    rng.shuffle(shape_plan)
+
+    return shape_plan
 
     st.divider()
     st.markdown("### Sliders")
