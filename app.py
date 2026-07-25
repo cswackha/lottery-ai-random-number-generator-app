@@ -132,7 +132,20 @@ st.markdown(
         padding-bottom: 2rem;
         max-width: 1220px;
     }
+    .exclusion-notice {
+        margin: 0.45rem 0 0.75rem 0;
+        padding: 0.65rem 0.85rem;
+        border-left: 4px solid #2563eb;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #334155;
+        font-size: clamp(0.78rem, 1.1vw, 0.9rem);
+        line-height: 1.45;
+    }
 
+    .exclusion-notice strong {
+        color: #1e3a8a;
+    }
     .hero {
         padding: clamp(1.25rem, 3vw, 2.2rem);
         border-radius: 22px;
@@ -1532,20 +1545,29 @@ try:
         st.stop()
 
     render_summary_cards(game_name, history)
-    render_how_to_play(game_name)
 
-    if cfg["has_bonus"] and bonus_exclusion_count:
-        excluded = (
-            history["bonus"]
-            .dropna()
-            .astype(int)
-            .head(bonus_exclusion_count)
-            .tolist()
-        )
-        st.caption(
-            f"Recent {cfg['bonus_name']} exclusions: "
-            f"{sorted(set(excluded))}"
-        )
+if cfg["has_bonus"] and bonus_exclusion_count:
+    excluded = (
+        history["bonus"]
+        .dropna()
+        .astype(int)
+        .head(bonus_exclusion_count)
+        .tolist()
+    )
+
+    exclusion_numbers = ", ".join(
+        str(number)
+        for number in sorted(set(excluded))
+    )
+
+    st.html(
+        '<div class="exclusion-notice">'
+        f'<strong>Recent {html.escape(cfg["bonus_name"])} exclusions:</strong> '
+        f'{html.escape(exclusion_numbers)}'
+        '</div>'
+    )
+
+render_how_to_play(game_name)
 
     if generate:
         results = generate_draws(
