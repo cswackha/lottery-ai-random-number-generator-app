@@ -1547,25 +1547,25 @@ try:
     render_summary_cards(game_name, history)
 
     if cfg["has_bonus"] and bonus_exclusion_count:
-    excluded = (
-        history["bonus"]
-        .dropna()
-        .astype(int)
-        .head(bonus_exclusion_count)
-        .tolist()
-    )
+        excluded = (
+            history["bonus"]
+            .dropna()
+            .astype(int)
+            .head(bonus_exclusion_count)
+            .tolist()
+        )
 
-    exclusion_numbers = ", ".join(
-        str(number)
-        for number in sorted(set(excluded))
-    )
+        exclusion_numbers = ", ".join(
+            str(number)
+            for number in sorted(set(excluded))
+        )
 
-    st.html(
-        '<div class="exclusion-notice">'
-        f'<strong>Recent {html.escape(cfg["bonus_name"])} exclusions:</strong> '
-        f'{html.escape(exclusion_numbers)}'
-        '</div>'
-    )
+        st.html(
+            '<div class="exclusion-notice">'
+            f'<strong>Recent {html.escape(cfg["bonus_name"])} exclusions:</strong> '
+            f'{html.escape(exclusion_numbers)}'
+            '</div>'
+        )
 
     render_how_to_play(game_name)
 
