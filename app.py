@@ -2,6 +2,7 @@ import html
 import io
 import random
 import re
+import base64
 from datetime import datetime, time, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -122,6 +123,63 @@ st.set_page_config(
     page_icon="🎲",
     layout="wide",
 )
+
+def set_page_background(image_path: str) -> None:
+    background_file = Path(image_path)
+
+    if not background_file.exists():
+        st.error(
+            f"Background image not found: {background_file.resolve()}"
+        )
+        return
+
+    encoded_image = base64.b64encode(
+        background_file.read_bytes()
+    ).decode("utf-8")
+
+    st.html(
+        f"""
+        <style>
+        /* Full main-page background */
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        section[data-testid="stMain"] {{
+            background-image:
+                linear-gradient(
+                    rgba(238, 244, 252, 0.10),
+                    rgba(238, 244, 252, 0.20)
+                ),
+                url("data:image/png;base64,{encoded_image}") !important;
+
+            background-size: cover !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+            background-attachment: fixed !important;
+        }}
+
+        /* Make the top Streamlit header transparent */
+        [data-testid="stHeader"] {{
+            background: transparent !important;
+        }}
+
+        /* Translucent content area so the image remains visible */
+        .block-container,
+        [data-testid="stMainBlockContainer"] {{
+            background: rgba(248, 250, 252, 0.40) !important;
+            border-radius: 18px !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+        }}
+
+        /* Keep the sidebar readable */
+        [data-testid="stSidebar"] {{
+            background: rgba(238, 242, 255, 0.96) !important;
+        }}
+        </style>
+        """
+    )
 
 st.markdown(
     """
@@ -369,7 +427,8 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
+# Apply the full-page background after the main CSS
+set_page_background("assets/page_background.png")
 
 # ============================================================
 # DATA FETCHING + PARSING
@@ -1548,17 +1607,9 @@ with st.sidebar:
 # MAIN PAGE
 # ============================================================
 
-st.markdown(
-    """
-    <div class="hero">
-        <h1>🎲 AI Lottery Random Number Generator</h1>
-        <p>
-            Generate frequency-weighted lottery draws with historical
-            filters, shape controls and smart bonus-ball exclusions.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.image(
+    "assets/banner.png",
+    use_container_width=True,
 )
 
 jackpots = fetch_current_jackpots()
@@ -1750,7 +1801,7 @@ current_year = datetime.now().year
 st.markdown(
     f"""
     <div class="site-footer">
-        © {current_year} Craig Swackhammer. All rights reserved.
+        © {current_year} Craig Swackhammer and HammerPoint LLC. All rights reserved.
         Original site code, written content and custom graphics may not
         be reproduced or redistributed without permission.
         <br>
