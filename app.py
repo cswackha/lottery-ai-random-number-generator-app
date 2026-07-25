@@ -1028,6 +1028,50 @@ def choose_bonus(
 
     return int(rng.choice(candidates, p=weights))
 
+def build_shape_plan(
+    selected_shape: str,
+    number_of_draws: int,
+    rng: np.random.Generator,
+) -> List[str]:
+    """
+    Create the shape assigned to each generated draw.
+
+    Combined selections are split as evenly as possible.
+    When the number of draws is odd, the extra draw is
+    randomly assigned to either shape.
+    """
+    combined_shapes = {
+        "Tight/Loose": ("Tight", "Loose"),
+        "More Tight/More Loose": (
+            "More Tight",
+            "More Loose",
+        ),
+    }
+
+    if selected_shape not in combined_shapes:
+        return [selected_shape] * number_of_draws
+
+    first_shape, second_shape = combined_shapes[selected_shape]
+
+    first_count = number_of_draws // 2
+    second_count = number_of_draws // 2
+
+    if number_of_draws % 2 == 1:
+        extra_shape = int(rng.integers(0, 2))
+
+        if extra_shape == 0:
+            first_count += 1
+        else:
+            second_count += 1
+
+    shape_plan = (
+        [first_shape] * first_count
+        + [second_shape] * second_count
+    )
+
+    rng.shuffle(shape_plan)
+
+    return shape_plan
 
 def generate_draws(
     game_name: str,
@@ -1411,51 +1455,19 @@ with st.sidebar:
         index=2,
     )
 
-def build_shape_plan(
-    selected_shape: str,
-    number_of_draws: int,
-    rng: np.random.Generator,
-) -> List[str]:
-    """
-    Create the shape assigned to each generated draw.
-
-    Combined selections are split as evenly as possible.
-    When the number of draws is odd, the extra draw is
-    randomly assigned to either shape.
-    """
-    combined_shapes = {
-        "Tight/Loose": ("Tight", "Loose"),
-        "More Tight/More Loose": (
-            "More Tight",
+    shape = st.selectbox(
+        "Shape",
+        [
+            "Loose",
             "More Loose",
-        ),
-    }
-
-    if selected_shape not in combined_shapes:
-        return [selected_shape] * number_of_draws
-
-    first_shape, second_shape = combined_shapes[selected_shape]
-
-    first_count = number_of_draws // 2
-    second_count = number_of_draws // 2
-
-    if number_of_draws % 2 == 1:
-        extra_shape = int(rng.integers(0, 2))
-
-        if extra_shape == 0:
-            first_count += 1
-        else:
-            second_count += 1
-
-    shape_plan = (
-        [first_shape] * first_count
-        + [second_shape] * second_count
+            "Tight",
+            "More Tight",
+            "Tight/Loose",
+            "More Tight/More Loose",
+            "Let AI choose",
+        ],
+        index=2,
     )
-
-    # Mix the order instead of listing every tight draw first.
-    rng.shuffle(shape_plan)
-
-    return shape_plan
 
     st.divider()
     st.markdown("### Sliders")
@@ -1467,7 +1479,6 @@ def build_shape_plan(
         5,
     )
 
-    # Always define this variable, including for Lotto Texas.
     bonus_exclusion_count = 0
 
     if cfg["has_bonus"]:
@@ -1520,6 +1531,7 @@ def build_shape_plan(
         "Optional random seed",
         value="",
     )
+
     seed = (
         int(seed_text)
         if seed_text.strip().isdigit()
@@ -1531,7 +1543,6 @@ def build_shape_plan(
         type="primary",
         use_container_width=True,
     )
-
 
 # ============================================================
 # MAIN PAGE
