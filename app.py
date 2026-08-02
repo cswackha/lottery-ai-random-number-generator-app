@@ -1481,12 +1481,7 @@ def render_result_cards(
 # ============================================================
 
 with st.sidebar:
-    logo_path = Path("assets/logo.png")
-
-    if logo_path.exists():
-        st.image(str(logo_path), use_container_width=True)
-
-    st.markdown("## Settings")
+    st.markdown("## DRAW SETTINGS")
 
     game_name = st.selectbox(
         "Pick a lottery game",
@@ -1602,6 +1597,56 @@ with st.sidebar:
         type="primary",
         use_container_width=True,
     )
+# Close the sidebar after Generate Draws is selected on mobile.
+if generate:
+    st.html(
+        """
+        <script>
+        (() => {
+            const isMobile = window.matchMedia(
+                "(max-width: 768px)"
+            ).matches;
+
+            if (!isMobile) {
+                return;
+            }
+
+            const closeSidebar = () => {
+                const selectors = [
+                    '[data-testid="stSidebarCollapseButton"] button',
+                    '[data-testid="stSidebarCollapseButton"]',
+                    'button[aria-label="Close sidebar"]',
+                    'button[aria-label="Collapse sidebar"]'
+                ];
+
+                for (const selector of selectors) {
+                    const button = document.querySelector(selector);
+
+                    if (button) {
+                        button.click();
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            if (!closeSidebar()) {
+                let attempts = 0;
+
+                const timer = setInterval(() => {
+                    attempts += 1;
+
+                    if (closeSidebar() || attempts >= 20) {
+                        clearInterval(timer);
+                    }
+                }, 100);
+            }
+        })();
+        </script>
+        """,
+        unsafe_allow_javascript=True,
+    )    
 
 # ============================================================
 # MAIN PAGE
