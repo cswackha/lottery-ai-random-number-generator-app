@@ -409,24 +409,49 @@ st.markdown(
         text-align: center;
     }
 
-    @media (max-width: 640px) {
-        .block-container {
-            padding-left: 0.8rem;
-            padding-right: 0.8rem;
+@media (max-width: 640px) {
+    .block-container {
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+    }
+
+    .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .jackpot-shell {
+        width: 100%;
+        overflow: hidden;
+        padding: 0.55rem 0;
+    }
+
+    .jackpot-track {
+        display: inline-flex;
+        width: max-content;
+        min-width: max-content;
+        padding-left: 0 !important;
+        white-space: nowrap;
+        animation: jackpot-scroll-mobile 22s linear infinite !important;
+        transform: translate3d(0, 0, 0);
+        will-change: transform;
+    }
+
+    .jackpot-item {
+        flex: 0 0 auto;
+        padding: 0 1.25rem;
+        font-size: 0.8rem;
+    }
+
+    @keyframes jackpot-scroll-mobile {
+        from {
+            transform: translate3d(100vw, 0, 0);
         }
 
-        .summary-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .jackpot-track {
-            animation-duration: 26s;
+        to {
+            transform: translate3d(-100%, 0, 0);
         }
     }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+}
 # Apply the full-page background after the main CSS
 set_page_background("assets/page_background.png")
 
