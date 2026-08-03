@@ -1619,7 +1619,13 @@ with st.sidebar:
 
     shape = st.selectbox(
     "Shape",
-    options=["Loose", "Tight", "AI Choose"],
+    options=["Loose",
+            "More Loose",
+            "Tight",
+            "More Tight",
+            "Tight/Loose",
+            "More Tight/More Loose",
+            "Let AI choose",],
     help=(
         "Controls how closely generated draws follow common historical patterns, "
         "including odd/even balance, low/high balance, total sum, number spread, "
