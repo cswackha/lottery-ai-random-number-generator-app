@@ -398,52 +398,49 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
-    /* Match the Setting explanations button to the select box below */
+    /* Precisely position the Setting explanations label and arrow */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
-        display: flex !important;
-        align-items: center !important;
+        position: relative !important;
         width: 100% !important;
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
+        min-height: 2.4rem !important;
+        padding: 0 !important;
     }
 
-    /* Stretch the button's inner content across the full width */
+    /* Align the icon and text with Powerball below */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > div {
-        display: flex !important;
-        align-items: center !important;
-        width: 100% !important;
-        min-width: 0 !important;
-    }
-
-    /* Keep the icon and text aligned to the left */
-    section[data-testid="stSidebar"]
-    .st-key-settings_explanations
+    .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] {
+        position: absolute !important;
+        left: 0.75rem !important;
+        right: 2.25rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+
         width: auto !important;
-        min-width: 0 !important;
-        margin-right: auto !important;
+        margin: 0 !important;
         text-align: left !important;
     }
 
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations
+    .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] p {
         margin: 0 !important;
         text-align: left !important;
         white-space: nowrap !important;
     }
 
-    /* Place the dropdown arrow at the far right */
+    /* Align and size the dropdown arrow like the select box */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button svg:last-child {
-        margin-left: auto !important;
-        margin-right: 0 !important;
+    .st-key-settings_explanations button > svg:last-child {
+        position: absolute !important;
+        right: 0.75rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+
         width: 1rem !important;
         height: 1rem !important;
-        min-width: 1rem !important;
-        flex: 0 0 1rem !important;
+        margin: 0 !important;
     }
 
     /* Footer */
@@ -1562,8 +1559,7 @@ with st.sidebar:
     st.markdown("## DRAW SETTINGS")
 
     with st.popover(
-        "Setting explanations",
-        icon="ℹ️",
+        "ℹ️ Setting explanations",
         width="stretch",
         key="settings_explanations",
     ):
