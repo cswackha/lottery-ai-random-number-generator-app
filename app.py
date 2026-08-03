@@ -434,7 +434,7 @@ st.markdown(
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button > svg:last-child {
         position: absolute !important;
-        right: 0.75rem !important;
+        right: 0.15rem !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
 
