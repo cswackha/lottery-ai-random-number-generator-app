@@ -407,53 +407,41 @@ st.markdown(
     SETTING EXPLANATIONS POPOVER
     ============================================================ */
 
-    /* Make the button match the full width of the select box */
+    /* Left-align the Setting explanations label */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
-        position: relative !important;
-        display: block !important;
-        width: 100% !important;
-        min-height: 2.45rem !important;
-        padding: 0 !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        padding-left: 0.45rem !important;
+        padding-right: 0.55rem !important;
     }
 
-    /* Position the icon and text on the left */
+    /* Prevent the label container from occupying the full button width */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] {
-        position: absolute !important;
-        left: 0.75rem !important;
-        right: 2.5rem !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-
+        flex: 0 1 auto !important;
         width: auto !important;
-        min-width: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        margin-left: 0 !important;
+        margin-right: auto !important;
         text-align: left !important;
     }
 
-    /* Keep the label text left-aligned */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] p {
+        width: auto !important;
         margin: 0 !important;
-        padding: 0 !important;
         text-align: left !important;
-        white-space: nowrap !important;
     }
 
-    /* Position the popover arrow inside the right edge */
+    /* Keep the dropdown arrow against the right side */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > svg:last-child {
-        position: absolute !important;
-        right: 0.95rem !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
+    .st-key-settings_explanations button svg:last-child {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
     }
 
     /* Footer */
@@ -1579,35 +1567,29 @@ with st.sidebar:
         st.markdown(
             """
             **Hot/Cold Frequency Weighting**  
-            Controls how strongly historical number frequency influences
-            number selection.
+            Controls how historical number frequency influences selection.
 
             **Shape**  
-            Controls how closely generated draws follow typical historical
-            patterns, including odd/even balance, low/high balance, total sum,
-            spread, and consecutive-number behavior.
+            Controls how closely draws follow typical historical patterns.
 
             **Number of Draws**  
-            Selects how many lottery combinations will be generated.
+            Selects how many combinations are generated.
 
             **Exclude Bonus Ball from Last X Draws**  
-            Prevents bonus-ball numbers appearing in the selected number of
-            recent drawings from being selected.
+            Prevents recently drawn bonus balls from being selected.
 
             **Cross-draw Repeat Penalty**  
             Reduces repeated white-ball numbers across generated combinations.
-            Lower values produce greater diversity between draws.
 
             **Optional Random Seed**  
-            Enter a whole number to reproduce the same results when the source
-            data and settings remain unchanged. Leave blank for a fresh random
-            result.
+            Reproduces the same results when settings and source data are unchanged.
             """
         )
 
     game_name = st.selectbox(
         "Pick a lottery game",
         list(GAMES.keys()),
+        key="game_name",
     )
     cfg = GAMES[game_name]
 
