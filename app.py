@@ -1787,7 +1787,9 @@ try:
             seed=seed,
         )
 
-        st.subheader("Generated Draws Results Table")
+        st.html('<div id="generated-draws-anchor"></div>')
+
+        st.subheader("Generated Draws")
 
         table_height = 38 * (len(results) + 1) + 3
 
@@ -1808,6 +1810,36 @@ try:
                 "_generated_draws.csv"
             ),
             mime="text/csv",
+        )
+
+        st.html(
+            """
+            <script>
+            (() => {
+                const isMobile = window.matchMedia(
+                    "(max-width: 768px)"
+                ).matches;
+
+                if (!isMobile) {
+                    return;
+                }
+
+                setTimeout(() => {
+                    const anchor = document.getElementById(
+                        "generated-draws-anchor"
+                    );
+
+                    if (anchor) {
+                        anchor.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+                    }
+                }, 700);
+            })();
+            </script>
+            """,
+            unsafe_allow_javascript=True,
         )
 
     with st.expander("Preview parsed history"):
