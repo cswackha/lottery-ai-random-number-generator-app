@@ -374,8 +374,12 @@ st.markdown(
         margin-top: 0.6rem;
     }
 
-    /* Sidebar: compact but readable */
-    section[data-testid="stSidebar"] div[data-testid="stVerticalBlock"] {
+    /* ============================================================
+    SIDEBAR: COMPACT BUT READABLE
+    ============================================================ */
+
+    section[data-testid="stSidebar"]
+    div[data-testid="stVerticalBlock"] {
         gap: 0.32rem !important;
     }
 
@@ -398,47 +402,58 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
-    /* Match the Setting explanations button to the select box below */
+
+    /* ============================================================
+    SETTING EXPLANATIONS POPOVER
+    ============================================================ */
+
+    /* Make the button match the full width of the select box */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
-        display: grid !important;
-        grid-template-columns: auto minmax(0, 1fr) 1rem !important;
-        align-items: center !important;
-        column-gap: 0.4rem !important;
-
+        position: relative !important;
+        display: block !important;
         width: 100% !important;
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
+        min-height: 2.45rem !important;
+        padding: 0 !important;
     }
 
-    /* Keep the label aligned on the left */
+    /* Position the icon and text on the left */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] {
+        position: absolute !important;
+        left: 0.75rem !important;
+        right: 2.5rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+
         width: auto !important;
         min-width: 0 !important;
         margin: 0 !important;
+        padding: 0 !important;
         text-align: left !important;
-        justify-self: start !important;
     }
 
+    /* Keep the label text left-aligned */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] p {
         margin: 0 !important;
+        padding: 0 !important;
         text-align: left !important;
         white-space: nowrap !important;
     }
 
-    /* Place the dropdown arrow at the far right */
+    /* Position the popover arrow inside the right edge */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button svg:last-child {
-        margin-left: auto !important;
-        margin-right: 0 !important;
-        width: 1rem !important;
-        height: 1rem !important;
-        min-width: 1rem !important;
-        flex: 0 0 1rem !important;
+    .st-key-settings_explanations button > svg:last-child {
+        position: absolute !important;
+        right: 0.95rem !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
     /* Footer */
@@ -1557,34 +1572,36 @@ with st.sidebar:
     st.markdown("## DRAW SETTINGS")
 
     with st.popover(
-        "Setting explanations",
-        icon="ℹ️",
+        "ℹ️ Setting explanations",
         width="stretch",
         key="settings_explanations",
     ):
         st.markdown(
             """
             **Hot/Cold Frequency Weighting**  
-            Controls how strongly historical number frequency influences selection.
+            Controls how strongly historical number frequency influences
+            number selection.
 
             **Shape**  
-            Controls pattern constraints such as odd/even balance, low/high balance,
-            sum, spread, and consecutive numbers.
+            Controls how closely generated draws follow typical historical
+            patterns, including odd/even balance, low/high balance, total sum,
+            spread, and consecutive-number behavior.
 
             **Number of Draws**  
-            Selects how many combinations are generated.
+            Selects how many lottery combinations will be generated.
 
-            **Exclude Bonus Ball from last X draws**  
-            Prevents bonus-ball numbers from the selected number of recent drawings
-            from being chosen.
+            **Exclude Bonus Ball from Last X Draws**  
+            Prevents bonus-ball numbers appearing in the selected number of
+            recent drawings from being selected.
 
             **Cross-draw Repeat Penalty**  
             Reduces repeated white-ball numbers across generated combinations.
-            Lower values create greater diversity.
+            Lower values produce greater diversity between draws.
 
             **Optional Random Seed**  
-            Entering the same seed with the same settings and data reproduces the
-            same results. Leave blank for a fresh random result.
+            Enter a whole number to reproduce the same results when the source
+            data and settings remain unchanged. Leave blank for a fresh random
+            result.
             """
         )
 
