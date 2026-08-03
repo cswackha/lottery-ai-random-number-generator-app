@@ -401,43 +401,49 @@ st.markdown(
     /* Match the Setting explanations button to the select box below */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
-        display: grid !important;
-        grid-template-columns: auto minmax(0, 1fr) 1rem !important;
+        display: flex !important;
         align-items: center !important;
-        column-gap: 0.4rem !important;
-
         width: 100% !important;
         padding-left: 0.75rem !important;
         padding-right: 0.75rem !important;
     }
 
-    /* Keep the label aligned on the left */
+    /* Stretch the button's inner content across the full width */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button
+    .st-key-settings_explanations button > div {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* Keep the icon and text aligned to the left */
+    section[data-testid="stSidebar"]
+    .st-key-settings_explanations
     [data-testid="stMarkdownContainer"] {
         width: auto !important;
         min-width: 0 !important;
-        margin: 0 !important;
+        margin-right: auto !important;
         text-align: left !important;
-        justify-self: start !important;
     }
 
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button
+    .st-key-settings_explanations
     [data-testid="stMarkdownContainer"] p {
         margin: 0 !important;
         text-align: left !important;
         white-space: nowrap !important;
     }
 
-    /* Move the dropdown arrow to the far right */
+    /* Place the dropdown arrow at the far right */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > svg:last-child {
-        justify-self: end !important;
-        margin: 0 !important;
+    .st-key-settings_explanations button svg:last-child {
+        margin-left: auto !important;
+        margin-right: 0 !important;
         width: 1rem !important;
         height: 1rem !important;
         min-width: 1rem !important;
+        flex: 0 0 1rem !important;
     }
 
     /* Footer */
