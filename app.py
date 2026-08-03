@@ -1554,10 +1554,9 @@ with st.sidebar:
     )
 
     st.divider()
-
     st.markdown(
-        "<div style='height: 0.45rem;'></div>",
-        unsafe_allow_html=True,
+    "<div style='height: 0.45rem;'></div>",
+    unsafe_allow_html=True,
     )
 
     lock_sliders = st.checkbox(
@@ -1568,9 +1567,16 @@ with st.sidebar:
     )
 
     st.markdown(
-    "<h3 style='margin-top: 0.05rem; margin-bottom: 0.35rem;'>Sliders</h3>",
-    unsafe_allow_html=True,
-)
+        """
+        <h3 style="
+            margin-top: 0.05rem;
+            margin-bottom: 0.35rem;
+        ">
+            Sliders
+        </h3>
+        """,
+        unsafe_allow_html=True,
+    )
 
     number_of_draws = st.slider(
         "Number of draws",
@@ -1593,7 +1599,7 @@ with st.sidebar:
             disabled=lock_sliders,
         )
 
-    cross_draw_penalty = st.slider(
+    cross_draw_repeat_penalty = st.slider(
         "Cross-draw repeat penalty",
         min_value=0.1,
         max_value=1.5,
