@@ -430,17 +430,15 @@ st.markdown(
         white-space: nowrap !important;
     }
 
-    /* Align and size the dropdown arrow like the select box */
+    /* Place the dropdown arrow at the far right */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > svg:last-child {
-        position: absolute !important;
-        right: 2.25rem !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-
+    .st-key-settings_explanations button svg:last-child {
+        margin-left: auto !important;
+        margin-right: 0 !important;
         width: 1rem !important;
         height: 1rem !important;
-        margin: 0 !important;
+        min-width: 1rem !important;
+        flex: 0 0 1rem !important;
     }
 
     /* Footer */
