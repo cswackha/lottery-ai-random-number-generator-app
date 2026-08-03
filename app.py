@@ -1554,13 +1554,23 @@ with st.sidebar:
     )
 
     st.divider()
+
+    lock_sliders = st.checkbox(
+        "🔒 Lock sliders",
+        value=False,
+        help="Prevents sliders from moving while scrolling on mobile.",
+        key="lock_sliders",
+    )
+
     st.markdown("### Sliders")
 
     number_of_draws = st.slider(
         "Number of draws",
-        1,
-        50,
-        5,
+        min_value=1,
+        max_value=50,
+        value=5,
+        step=1,
+        disabled=lock_sliders,
     )
 
     bonus_exclusion_count = 0
@@ -1568,21 +1578,20 @@ with st.sidebar:
     if cfg["has_bonus"]:
         bonus_exclusion_count = st.slider(
             f"Exclude {cfg['bonus_name']} from last X draws",
-            1,
-            99,
-            10,
+            min_value=1,
+            max_value=99,
+            value=10,
+            step=1,
+            disabled=lock_sliders,
         )
 
-    cross_draw_repeat_penalty = st.slider(
+    cross_draw_penalty = st.slider(
         "Cross-draw repeat penalty",
-        0.10,
-        1.50,
-        0.70,
-        0.05,
-        help=(
-            "Below 1.0 discourages reuse across generated draws. "
-            "Above 1.0 allows more repeats."
-        ),
+        min_value=0.1,
+        max_value=1.5,
+        value=0.7,
+        step=0.1,
+        disabled=lock_sliders,
     )
 
     st.divider()
