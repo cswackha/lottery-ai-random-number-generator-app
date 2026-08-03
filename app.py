@@ -398,25 +398,25 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
-    /* Left-align the Setting explanations popover */
+    /* Left-align only the Setting explanations popover */
     section[data-testid="stSidebar"]
-    button[data-testid="stPopoverButton"] {
+    .st-key-settings_explanations button {
         justify-content: flex-start !important;
         text-align: left !important;
-        padding-left: 0.15rem !important;
     }
 
     section[data-testid="stSidebar"]
-    button[data-testid="stPopoverButton"] > div {
+    .st-key-settings_explanations button > div {
         width: 100% !important;
         justify-content: flex-start !important;
+        text-align: left !important;
     }
 
     section[data-testid="stSidebar"]
-    button[data-testid="stPopoverButton"] p {
-        width: 100% !important;
+    .st-key-settings_explanations button p {
+        flex-grow: 0 !important;
         text-align: left !important;
-        margin: 0 !important;
+        margin-right: auto !important;
     }
 
     /* Footer */
@@ -1535,8 +1535,10 @@ with st.sidebar:
     st.markdown("## DRAW SETTINGS")
 
     with st.popover(
-        "ℹ️ Setting explanations",
-        use_container_width=True,
+        "Setting explanations",
+        icon="ℹ️",
+        width="stretch",
+        key="settings_explanations",
     ):
         st.markdown(
             """
