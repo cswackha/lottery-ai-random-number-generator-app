@@ -1513,6 +1513,36 @@ def render_result_cards(
 with st.sidebar:
     st.markdown("## DRAW SETTINGS")
 
+    with st.popover(
+        "ℹ️ Setting explanations",
+        use_container_width=True,
+    ):
+        st.markdown(
+            """
+            **Hot/Cold Frequency Weighting**  
+            Controls how strongly historical number frequency influences selection.
+
+            **Shape**  
+            Controls pattern constraints such as odd/even balance, low/high balance,
+            sum, spread, and consecutive numbers.
+
+            **Number of Draws**  
+            Selects how many combinations are generated.
+
+            **Exclude Bonus Ball from last X draws**  
+            Prevents bonus-ball numbers from the selected number of recent drawings
+            from being chosen.
+
+            **Cross-draw Repeat Penalty**  
+            Reduces repeated white-ball numbers across generated combinations.
+            Lower values create greater diversity.
+
+            **Optional Random Seed**  
+            Entering the same seed with the same settings and data reproduces the
+            same results. Leave blank for a fresh random result.
+            """
+        )
+        
     game_name = st.selectbox(
         "Pick a lottery game",
         list(GAMES.keys()),
@@ -1534,24 +1564,25 @@ with st.sidebar:
         )
 
     weighting_mode = st.selectbox(
-        "Hot/cold frequency weighting",
-        ["Hot", "Cold", "Hot/Cold"],
-        index=2,
-    )
+    "Hot/Cold Frequency Weighting",
+    options=["Hot/Cold", "Aggressive Hot", "Cold Chaser"],
+    help=(
+        "Controls how strongly historical number frequency affects the draw. "
+        "Hot settings favor numbers drawn more frequently, while cold-oriented "
+        "settings give more weight to less frequently drawn numbers."
+    ),
+)
 
     shape = st.selectbox(
-        "Shape",
-        [
-            "Loose",
-            "More Loose",
-            "Tight",
-            "More Tight",
-            "Tight/Loose",
-            "More Tight/More Loose",
-            "Let AI choose",
-        ],
-        index=2,
-    )
+    "Shape",
+    options=["Loose", "Tight", "AI Choose"],
+    help=(
+        "Controls how closely generated draws follow common historical patterns, "
+        "including odd/even balance, low/high balance, total sum, number spread, "
+        "and consecutive-number behavior. Tight applies stronger constraints; "
+        "Loose allows more variation."
+    ),
+)
 
     st.divider()
     st.markdown(
@@ -1579,34 +1610,48 @@ with st.sidebar:
     )
 
     number_of_draws = st.slider(
-        "Number of draws",
-        min_value=1,
-        max_value=50,
-        value=5,
-        step=1,
-        disabled=lock_sliders,
-    )
+    "Number of draws",
+    min_value=1,
+    max_value=50,
+    value=5,
+    step=1,
+    disabled=lock_sliders,
+    help=(
+        "Selects how many unique lottery combinations will be generated. "
+        "Increasing this value creates more result rows."
+    ),
+)
 
     bonus_exclusion_count = 0
 
     if cfg["has_bonus"]:
-        bonus_exclusion_count = st.slider(
+       bonus_exclusion_count = st.slider(
             f"Exclude {cfg['bonus_name']} from last X draws",
             min_value=1,
             max_value=99,
             value=10,
             step=1,
             disabled=lock_sliders,
-        )
+            help=(
+                f"Prevents a recently drawn {cfg['bonus_name']} from being selected. "
+                "For example, a value of 10 excludes bonus-ball numbers appearing in "
+                "the most recent 10 historical drawings."
+            ),
+)
 
     cross_draw_repeat_penalty = st.slider(
-        "Cross-draw repeat penalty",
-        min_value=0.1,
-        max_value=1.5,
-        value=0.7,
-        step=0.1,
-        disabled=lock_sliders,
-    )
+    "Cross-draw repeat penalty",
+    min_value=0.1,
+    max_value=1.5,
+    value=0.7,
+    step=0.1,
+    disabled=lock_sliders,
+    help=(
+        "Reduces repeated white-ball numbers across the generated combinations. "
+        "Lower values apply a stronger repeat penalty and create more diversity. "
+        "A value near 1.0 applies little or no penalty."
+    ),
+)
 
     st.divider()
     st.markdown("### Constraints")
@@ -1637,6 +1682,12 @@ with st.sidebar:
     seed_text = st.text_input(
         "Optional random seed",
         value="",
+        placeholder="Example: 12345",
+        help=(
+            "Enter a positive whole number to reproduce the same generated "
+            "results with the same settings and data. Leave blank for a new "
+            "random result."
+        ),
     )
 
     seed = (
