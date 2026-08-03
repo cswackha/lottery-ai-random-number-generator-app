@@ -1556,18 +1556,21 @@ with st.sidebar:
     st.divider()
 
     st.markdown(
-        "<div style='height: 0.75rem;'></div>",
+        "<div style='height: 0.45rem;'></div>",
         unsafe_allow_html=True,
     )
 
     lock_sliders = st.checkbox(
         "🔒 Lock sliders",
-        value=False,
+        value=True,
         help="Prevents sliders from moving while scrolling on mobile.",
         key="lock_sliders",
     )
 
-    st.markdown("### Sliders")
+    st.markdown(
+    "<h3 style='margin-top: 0.05rem; margin-bottom: 0.35rem;'>Sliders</h3>",
+    unsafe_allow_html=True,
+)
 
     number_of_draws = st.slider(
         "Number of draws",
