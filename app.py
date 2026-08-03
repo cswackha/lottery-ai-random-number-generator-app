@@ -398,6 +398,27 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
+    /* Left-align the Setting explanations popover */
+    section[data-testid="stSidebar"]
+    button[data-testid="stPopoverButton"] {
+        justify-content: flex-start !important;
+        text-align: left !important;
+        padding-left: 0.15rem !important;
+    }
+
+    section[data-testid="stSidebar"]
+    button[data-testid="stPopoverButton"] > div {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    section[data-testid="stSidebar"]
+    button[data-testid="stPopoverButton"] p {
+        width: 100% !important;
+        text-align: left !important;
+        margin: 0 !important;
+    }
+
     /* Footer */
     .site-footer {
         margin-top: 1.2rem;
@@ -1542,7 +1563,7 @@ with st.sidebar:
             same results. Leave blank for a fresh random result.
             """
         )
-        
+
     game_name = st.selectbox(
         "Pick a lottery game",
         list(GAMES.keys()),
