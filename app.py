@@ -1593,14 +1593,14 @@ with st.sidebar:
             disabled=lock_sliders,
         )
 
-        cross_draw_penalty = st.slider(
-            "Cross-draw repeat penalty",
-            min_value=0.1,
-            max_value=1.5,
-            value=0.7,
-            step=0.1,
-            disabled=lock_sliders,
-        )
+    cross_draw_penalty = st.slider(
+        "Cross-draw repeat penalty",
+        min_value=0.1,
+        max_value=1.5,
+        value=0.7,
+        step=0.1,
+        disabled=lock_sliders,
+    )
 
     st.divider()
     st.markdown("### Constraints")
