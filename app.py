@@ -1555,6 +1555,11 @@ with st.sidebar:
 
     st.divider()
 
+    st.markdown(
+        "<div style='height: 0.55rem;'></div>",
+        unsafe_allow_html=True,
+    )
+    
     lock_sliders = st.checkbox(
         "🔒 Lock sliders",
         value=False,
