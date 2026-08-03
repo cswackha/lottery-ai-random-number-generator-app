@@ -430,14 +430,15 @@ st.markdown(
         white-space: nowrap !important;
     }
 
-    /* Move the dropdown arrow to the far right */
+    /* Place the dropdown arrow at the far right */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > svg:last-child {
-        justify-self: end !important;
-        margin: 0 !important;
+    .st-key-settings_explanations button svg:last-child {
+        margin-left: auto !important;
+        margin-right: 0 !important;
         width: 1rem !important;
         height: 1rem !important;
         min-width: 1rem !important;
+        flex: 0 0 1rem !important;
     }
 
     /* Footer */
