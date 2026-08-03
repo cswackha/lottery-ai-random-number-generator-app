@@ -398,28 +398,28 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
-    /* Precisely position the Setting explanations label and arrow */
+    /* Match the Setting explanations button to the select box below */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
-        position: relative !important;
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr) 1rem !important;
+        align-items: center !important;
+        column-gap: 0.4rem !important;
+
         width: 100% !important;
-        min-height: 2.4rem !important;
-        padding: 0 !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
     }
 
-    /* Align the icon and text with Powerball below */
+    /* Keep the label aligned on the left */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button
     [data-testid="stMarkdownContainer"] {
-        position: absolute !important;
-        left: 0.75rem !important;
-        right: 2.25rem !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-
         width: auto !important;
+        min-width: 0 !important;
         margin: 0 !important;
         text-align: left !important;
+        justify-self: start !important;
     }
 
     section[data-testid="stSidebar"]
@@ -430,15 +430,14 @@ st.markdown(
         white-space: nowrap !important;
     }
 
-    /* Place the dropdown arrow at the far right */
+    /* Move the dropdown arrow to the far right */
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button svg:last-child {
-        margin-left: auto !important;
-        margin-right: 0 !important;
+    .st-key-settings_explanations button > svg:last-child {
+        justify-self: end !important;
+        margin: 0 !important;
         width: 1rem !important;
         height: 1rem !important;
         min-width: 1rem !important;
-        flex: 0 0 1rem !important;
     }
 
     /* Footer */
@@ -1557,7 +1556,8 @@ with st.sidebar:
     st.markdown("## DRAW SETTINGS")
 
     with st.popover(
-        "ℹ️ Setting explanations",
+        "Setting explanations",
+        icon="ℹ️",
         width="stretch",
         key="settings_explanations",
     ):
