@@ -398,25 +398,39 @@ st.markdown(
         margin-bottom: 0.05rem !important;
     }
 
-    /* Left-align only the Setting explanations popover */
+    /* Align Setting explanations text with the select-box text below */
     section[data-testid="stSidebar"]
     .st-key-settings_explanations button {
+        display: flex !important;
         justify-content: flex-start !important;
-        text-align: left !important;
+        align-items: center !important;
+        gap: 0.35rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.55rem !important;
     }
 
     section[data-testid="stSidebar"]
-    .st-key-settings_explanations button > div {
-        width: 100% !important;
-        justify-content: flex-start !important;
-        text-align: left !important;
-    }
-
-    section[data-testid="stSidebar"]
-    .st-key-settings_explanations button p {
-        flex-grow: 0 !important;
-        text-align: left !important;
+    .st-key-settings_explanations button
+    [data-testid="stMarkdownContainer"] {
+        flex: 0 1 auto !important;
+        width: auto !important;
+        margin-left: 0 !important;
         margin-right: auto !important;
+        text-align: left !important;
+    }
+
+    section[data-testid="stSidebar"]
+    .st-key-settings_explanations button
+    [data-testid="stMarkdownContainer"] p {
+        width: auto !important;
+        margin: 0 !important;
+        text-align: left !important;
+    }
+
+    section[data-testid="stSidebar"]
+    .st-key-settings_explanations button svg:last-child {
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
     }
 
     /* Footer */
