@@ -122,6 +122,7 @@ st.set_page_config(
     page_title="AI Lottery Random Number Generator",
     page_icon="🎲",
     layout="wide",
+     initial_sidebar_state="expanded",
 )
 
 def set_page_background(image_path: str) -> None:
