@@ -478,7 +478,7 @@ st.markdown(
             min-width: max-content;
             padding-left: 0 !important;
             white-space: nowrap;
-            animation: jackpot-scroll-mobile 22s linear infinite !important;
+            animation: jackpot-scroll-mobile 36s linear infinite !important;
             transform: translate3d(0, 0, 0);
             will-change: transform;
         }
