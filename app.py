@@ -1802,6 +1802,76 @@ if generate:
         """,
         unsafe_allow_javascript=True,
     )    
+# ============================================================
+# FORCE SIDEBAR OPEN ON INITIAL MOBILE LOAD
+# ============================================================
+
+if "sidebar_initialized" not in st.session_state:
+    st.session_state.sidebar_initialized = True
+
+    st.html(
+        """
+        <script>
+        (() => {
+            const isMobile = window.matchMedia(
+                "(max-width: 768px)"
+            ).matches;
+
+            if (!isMobile) {
+                return;
+            }
+
+            const openSidebar = () => {
+                const sidebar = document.querySelector(
+                    '[data-testid="stSidebar"]'
+                );
+
+                /* Already open */
+                if (
+                    sidebar &&
+                    sidebar.getAttribute("aria-expanded") === "true"
+                ) {
+                    return true;
+                }
+
+                const selectors = [
+                    '[data-testid="stSidebarCollapsedControl"] button',
+                    '[data-testid="stSidebarCollapsedControl"]',
+                    'button[aria-label="Open sidebar"]',
+                    'button[aria-label="Expand sidebar"]'
+                ];
+
+                for (const selector of selectors) {
+                    const button = document.querySelector(selector);
+
+                    if (button) {
+                        button.click();
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            /* Give Streamlit time to build the mobile interface */
+            setTimeout(() => {
+                if (!openSidebar()) {
+                    let attempts = 0;
+
+                    const timer = setInterval(() => {
+                        attempts += 1;
+
+                        if (openSidebar() || attempts >= 20) {
+                            clearInterval(timer);
+                        }
+                    }, 100);
+                }
+            }, 250);
+        })();
+        </script>
+        """,
+        unsafe_allow_javascript=True,
+    )
 
 # ============================================================
 # MAIN PAGE
